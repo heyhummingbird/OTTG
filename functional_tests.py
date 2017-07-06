@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -37,7 +39,8 @@ class NewVisitorTest(unittest.TestCase):
         ## <tr> </tr> specifies a row
         ## rows is a "list"
         self.assertTrue(
-            any(row.text == '1: Read OS' for row in rows)
+            any(row.text == '1: Read OS' for row in rows),
+            "New to-do item didn't appear in the table."
         )
         
         # There is still a text box inviting her to add another item. She
