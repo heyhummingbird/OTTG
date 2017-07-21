@@ -28,6 +28,32 @@ class NewItemTest(TestCase):
 
         self.assertRedirects(response, f'/lists/{correct_list.id}/')
 
+    def test_can_save_a_item_in_undone_mode(self):
+        correct_list = List.objects.create()
+        response = self.client.post(f'/lists/{correct_list.id}/add_item', 
+            data = {'input_item': 'A new list item'})
+        self.assertEqual(
+            Item.objects.filter(list=correct_list).first().done, 
+            False)
+        self.client.post(f'/lists/{correct_list.id}/done/{Item.objects.filter(list=correct_list).first().id}/')
+        self.assertEqual(
+            Item.objects.filter(list=correct_list).first().done, 
+            True)
+
+    def test_equal_item(self):
+        correct_list = List.objects.create()
+        Item.objects.create(text='A new list item', list=correct_list)
+        self.assertEqual(
+            Item.objects.filter(list=correct_list).first(),
+            Item.objects.get(id=Item.objects.filter(list=correct_list).first().id)
+            )
+        t = Item.objects.filter(list=correct_list).first()
+        t.done = True
+        t.save()
+        self.assertEqual(
+            t.done,
+            True
+            )
 
 class ListViewTest(TestCase):
     def test_displays_correct_list_items(self):

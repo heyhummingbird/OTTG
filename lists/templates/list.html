@@ -7,7 +7,45 @@
 {% block table %}
 	<table id="id_list_table" class="table">
 		{% for item in list.item_set.all %}
-    		<tr><td>{{ forloop.counter }}: {{ item.text }}</td></tr>
+    		<tr><td>{{ forloop.counter }}: {{ item.text }}
+ 			<span style="float:right;">
+     			<form action="delete/{{ item.id }}/">
+    				<button class="button1">delete</button>
+    			</form>
+    		</span>
+    		<span style="float:right;">
+    			<form action="done/{{ item.id }}/">
+    				<button id="done" class="button1">done</button>
+    			</form>
+    		</span>
+    		</td></tr>
 		{% endfor %}
 	</table>
+
+<script>
+var rows = document.getElementById("id_list_table").rows.length ;
+{% for item in list.item_set.all %}
+	var complete = "{{item.done}}".toLowerCase() ;
+	if (complete === "true") {
+		var index = {{ forloop.counter }} - 1 ;
+		var thing = document.querySelector("#id_list_table").rows[index] ;
+		thing.setAttribute('class', 'delete') ;
+		thing.childNodes[0].childNodes[3].childNodes[1].childNodes[1].innerHTML="undone";
+	}
+{% endfor %}
+
+function ChangeColor(event) {
+//	this.style.color = "red" ;
+}
+</script>
+
+<br><br><br><br><br><br>
+
+<p id="hi" style="display: none">
+  Let's use:
+  <span>Cascading</span>
+  <span>Style</span>
+  <span>Sheets</span>
+</p>
+
 {% endblock %}

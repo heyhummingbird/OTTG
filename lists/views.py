@@ -23,3 +23,13 @@ def add_item(request, list_id):
     list_ = List.objects.get(id=list_id)
     Item.objects.create(text=new_item_text, list=list_)
     return redirect(f'/lists/{list_.id}/')
+
+def delete_item(request, list_id, item_id):
+    Item.objects.filter(id=item_id).delete()
+    return redirect(f'/lists/{list_id}/')
+
+def done_item(request, list_id, item_id):
+    item = Item.objects.filter(id=item_id)[0]
+    item.done = not item.done
+    item.save()
+    return redirect(f'/lists/{list_id}/')
