@@ -4,9 +4,8 @@
 }
 
 body {
-    font: 14px 'Helvetica Neue';
+    font: 20px Forum, 'Bellefair', 'Helvetica Neue';
     font-weight: 400;
-    font-size: 150%;
     position: relative;
     z-index: 1;
 /*    background: url(/static/bootstrap/img/background-cat.jpg);
@@ -52,7 +51,8 @@ h1 {
 .button1 {
     background-color: white;
     color: black;
-    font-family: Perpetua;
+    font-family: 'Quattrocento Sans', perpetua;
+    font-size: 75% ;
     border: 2px solid #A9A9A9; /* Green */
     margin: 2px 2px;
 }
