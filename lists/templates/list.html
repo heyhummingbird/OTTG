@@ -9,13 +9,15 @@
 		{% for item in list.item_set.all %}
     		<tr><td>{{ forloop.counter }}: {{ item.text }}
  			<span style="float:right;">
-     			<form action="delete/{{ item.id }}/">
-    				<button class="button1">delete</button>
+     			<form method="POST" action="delete/{{ item.id }}/" >
+    				<button class="button1" name="delete">delete</button>
+            {% csrf_token %}
     			</form>
     		</span>
     		<span style="float:right;">
-    			<form action="done/{{ item.id }}/">
-    				<button id="done" class="button1">done</button>
+    			<form  method="POST" action="done/{{ item.id }}/">
+    				<button class="button1" name="done">done</button>
+            {% csrf_token %}
     			</form>
     		</span>
     		</td></tr>

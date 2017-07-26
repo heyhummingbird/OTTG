@@ -25,11 +25,13 @@ def add_item(request, list_id):
     return redirect(f'/lists/{list_.id}/')
 
 def delete_item(request, list_id, item_id):
-    Item.objects.filter(id=item_id).delete()
-    return redirect(f'/lists/{list_id}/')
+    if request.method == 'POST':
+        Item.objects.filter(id=item_id).delete()
+        return redirect(f'/lists/{list_id}/')
 
 def done_item(request, list_id, item_id):
-    item = Item.objects.filter(id=item_id)[0]
-    item.done = not item.done
-    item.save()
-    return redirect(f'/lists/{list_id}/')
+    if request.method == 'POST':
+        item = Item.objects.filter(id=item_id)[0]
+        item.done = not item.done
+        item.save()
+        return redirect(f'/lists/{list_id}/')
