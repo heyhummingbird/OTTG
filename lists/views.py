@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from lists.models import Item, List
+import json
 
 def home_page(request):
 #    return HttpResponse('<html><title>To-Do Lists</title></html>')
@@ -29,9 +30,20 @@ def delete_item(request, list_id, item_id):
         Item.objects.filter(id=item_id).delete()
         return redirect(f'/lists/{list_id}/')
 
-def done_item(request, list_id, item_id):
+def done_item(request, list_id):
     if request.method == 'POST':
-        item = Item.objects.filter(id=item_id)[0]
+#        print(request)
+#        print(type(request))
+#        print(request.META)
+#        print(request.META['CONTENT_TYPE'])
+#        print(type(request.META))
+#        print(dir(request.META))
+#        print(getattr(request, "META"))
+        body_unicode = request.body.decode('utf-8')
+#        print(body_unicode)
+        body_data = json.loads(body_unicode)
+#        print(body_data)
+        item = Item.objects.filter(id=body_data['item_id'])[0]
         item.done = not item.done
         item.save()
         return redirect(f'/lists/{list_id}/')

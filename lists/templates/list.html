@@ -15,30 +15,83 @@
     			</form>
     		</span>
     		<span style="float:right;">
-    			<form  method="POST" action="done/{{ item.id }}/">
-    				<button class="button1" name="done">done</button>
-            {% csrf_token %}
-    			</form>
+    			<button class="button1" onclick="ChangeColor({{ forloop.counter }} - 1, {{ item.id }})" id="done" name="done">done</button>
     		</span>
     		</td></tr>
 		{% endfor %}
 	</table>
 
 <script>
-var rows = document.getElementById("id_list_table").rows.length ;
+var csrftoken = getCookie('csrftoken');
+
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 {% for item in list.item_set.all %}
+  var index = {{ forloop.counter }} - 1 ;
+  var row = document.querySelector("#id_list_table").rows[index] ;
+  var button = row.childNodes[0].childNodes[3].childNodes[1] ;
+//  button.addEventListener('click', ChangeColor({{ forloop.counter }}));
+//  button.onclick = ChangeColor({{ forloop.counter }}) ;
 	var complete = "{{item.done}}".toLowerCase() ;
 	if (complete === "true") {
-		var index = {{ forloop.counter }} - 1 ;
-		var thing = document.querySelector("#id_list_table").rows[index] ;
-		thing.setAttribute('class', 'delete') ;
-		thing.childNodes[0].childNodes[3].childNodes[1].childNodes[1].innerHTML="undone";
+    console.log(button) ;
+    console.log(row.classList) ;
+		row.setAttribute('class', 'delete') ;
+    console.log(row.classList) ;
+		row.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
 	}
 {% endfor %}
 
-function ChangeColor(event) {
-//	this.style.color = "red" ;
+//var done = document.querySelector("#done") ;
+//done.addEventListener('click', ChangeColor);
+function ChangeColor(index, item_id) {
+  var row = document.querySelector("#id_list_table").rows[index] ;
+  if (row.classList.contains("delete") === true) {
+    row.removeAttribute('class', 'delete') ;
+    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="done" ;
+  }
+  else {
+    row.setAttribute('class', 'delete') ;
+    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
+  }
+  console.log("index = " + index) ;
+  console.log(row.classList) ;
+  console.log(row.classList.contains("delete")) ;
+  console.log("hi") ;
+
+  var headers = new Headers();
+  headers.append('X-CSRFToken', csrftoken);
+  headers.append('Accept', "application/json");
+  headers.append('Content-Type', "application/json");
+
+  var body = {
+    "item_id": item_id
+  } ;
+
+  var done_request = new Request('done/', 
+                                {method: "post",
+                                 body: JSON.stringify(body),
+                                 headers: headers,
+                                 credentials: 'include'
+                                })
+  fetch(done_request).then(function(response) {
+    //處理 response
+}).catch(function(err) {
+    alert("Error!")
+})
+  
+  return ;
 }
+
+
+//done.addEventListener('click', ChangeColor);
+
+
+
 </script>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>

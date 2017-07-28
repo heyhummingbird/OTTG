@@ -22,7 +22,7 @@ urlpatterns = [
 	url(r'^(\d+)/add_item$', views.add_item, name='add_item'),
 	url(r'^new$', views.new_list, name='new_list'),
     url(r'^(\d+)/delete/(\d+)/$', views.delete_item, name='delete_item'),
-    url(r'^(\d+)/done/(\d+)/$', views.done_item, name='done_item')
+    url(r'^(\d+)/done/$', views.done_item, name='done_item')
 ]
 
 
