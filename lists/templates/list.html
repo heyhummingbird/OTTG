@@ -7,7 +7,7 @@
 {% block table %}
 	<table id="id_list_table" class="table">
 		{% for item in list.item_set.all %}
-    		<tr><td>{{ forloop.counter }}: {{ item.text }}
+    		<tr class="item" item_done="{{item.done}}" item_id="{{item.id}}"><td>{{ forloop.counter }}: {{ item.text }}
  			<span style="float:right;">
      			<form method="POST" action="delete/{{ item.id }}/" >
     				<button class="button1" name="delete">delete</button>
@@ -21,74 +21,7 @@
 		{% endfor %}
 	</table>
 
-<script>
-var csrftoken = getCookie('csrftoken');
-
-function getCookie(name) {
-  var value = "; " + document.cookie;
-  var parts = value.split("; " + name + "=");
-  if (parts.length == 2) return parts.pop().split(";").shift();
-}
-
-{% for item in list.item_set.all %}
-  var index = {{ forloop.counter }} - 1 ;
-  var row = document.querySelector("#id_list_table").rows[index] ;
-  var button = row.childNodes[0].childNodes[3].childNodes[1] ;
-//  button.addEventListener('click', ChangeColor({{ forloop.counter }}));
-  button.addEventListener('click', function() {
-    ChangeColor({{ forloop.counter }} - 1, {{ item.id }}) ;
-  }) 
-/*
-  button.onclick = function() {
-    ChangeColor({{ forloop.counter }} - 1, {{ item.id }}) ;
-  }
-*/
-	var complete = "{{item.done}}".toLowerCase() ;
-	if (complete === "true") {
-		row.setAttribute('class', 'delete') ;
-		row.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
-	}
-{% endfor %}
-
-//var done = document.querySelector("#done") ;
-//done.addEventListener('click', ChangeColor);
-function ChangeColor(index, item_id) {
-  var row = document.querySelector("#id_list_table").rows[index] ;
-  if (row.classList.contains("delete") === true) {
-    row.removeAttribute('class', 'delete') ;
-    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="done" ;
-  }
-  else {
-    row.setAttribute('class', 'delete') ;
-    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
-  }
-  console.log("index = " + index) ;
-  console.log(row.classList) ;
-  console.log(row.classList.contains("delete")) ;
-
-  var headers = new Headers();
-  headers.append('X-CSRFToken', csrftoken);
-  headers.append('Accept', "application/json");
-  headers.append('Content-Type', "application/json");
-
-  var body = {
-    "item_id": item_id
-  } ;
-
-  var done_request = new Request('done/', 
-                                {method: "post",
-                                 body: JSON.stringify(body),
-                                 headers: headers,
-                                 credentials: 'include'
-                                })
-  fetch(done_request).then(function(response) {
-    //處理 response
-  }).catch(function(err) {
-      alert("Error!")
-  })
-  return ;
-}
-
+<script src="/static/bootstrap/js/list.js">
 </script>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
