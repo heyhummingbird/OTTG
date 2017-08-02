@@ -7,7 +7,7 @@ function getCookie(name) {
 }
 
 $(".item").each(function(i) {
-  var button = this.childNodes[0].childNodes[3].childNodes[1] ;
+  var button = this.childNodes[3].childNodes[1] ;
   var item_id = $(this).attr('item_id') ;
   var item_done = $(this).attr('item_done') ;
 
@@ -18,20 +18,20 @@ $(".item").each(function(i) {
   var complete = item_done.toLowerCase() ;
   if (complete === "true") {
     this.setAttribute('class', 'item delete') ;
-    this.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
+    this.childNodes[3].childNodes[1].innerHTML="undone" ;
   }
 });
 
 
 function ChangeColor(index, item_id) {
-  var row = document.querySelector("#id_list_table").rows[index] ;
+  var row = document.querySelector("#id_list_table").childNodes[1].childNodes[index*2 + 1] ;
   if (row.classList.contains("delete") === true) {
     row.removeAttribute('class', 'delete') ;
-    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="done" ;
+    row.childNodes[3].childNodes[1].innerHTML="done" ;
   }
   else {
     row.setAttribute('class', 'item delete') ;
-    row.childNodes[0].childNodes[3].childNodes[1].innerHTML="undone" ;
+    row.childNodes[3].childNodes[1].innerHTML="undone" ;
   }
 
   var headers = new Headers();
@@ -49,7 +49,7 @@ function ChangeColor(index, item_id) {
     headers: headers,
     credentials: 'include'
   })
-  
+
   fetch(done_request).then(function(response) {
     //處理 response
   }).catch(function(err) {
