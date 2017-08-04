@@ -1,4 +1,7 @@
-var csrftoken = getCookie('csrftoken');
+var headers = new Headers();
+headers.append('X-CSRFToken', getCookie('csrftoken'));
+headers.append('Accept', "application/json");
+headers.append('Content-Type', "application/json");
 
 function getCookie(name) {
   var value = "; " + document.cookie;
@@ -7,12 +10,16 @@ function getCookie(name) {
 }
 
 $(".item").each(function(i) {
-  var button = this.childNodes[3].childNodes[1] ;
+  var done_button = this.childNodes[3].childNodes[1] ;
+  var delete_button = this.childNodes[1].childNodes[1] ;
   var item_id = $(this).attr('item_id') ;
   var item_done = $(this).attr('item_done') ;
 
-  button.addEventListener('click', function() {
-    ChangeColor(i, item_id) ;
+  done_button.addEventListener('click', function() {
+    DoneItem(i, item_id) ;
+  }) 
+  delete_button.addEventListener('click', function() {
+    DeleteItem(i, item_id) ;
   }) 
 
   var complete = item_done.toLowerCase() ;
@@ -22,8 +29,30 @@ $(".item").each(function(i) {
   }
 });
 
+function DeleteItem(index, item_id) {
+  var list = document.querySelector("#id_list_table").childNodes[1] ;
+  list.removeChild(list.childNodes[index*2 + 1]) ;
 
-function ChangeColor(index, item_id) {
+  var body = {
+    "item_id": item_id
+  } ;
+
+  var delete_request = new Request('', {
+    method: "delete", 
+    body: JSON.stringify(body),
+    headers: headers,
+    credentials: "include"
+  })
+
+  fetch(delete_request).then(function(response) {
+  }).catch(function(err) {
+      alert("Error!")
+  })
+  return ;
+
+}
+
+function DoneItem(index, item_id) {
   var row = document.querySelector("#id_list_table").childNodes[1].childNodes[index*2 + 1] ;
   if (row.classList.contains("delete") === true) {
     row.removeAttribute('class', 'delete') ;
@@ -33,11 +62,6 @@ function ChangeColor(index, item_id) {
     row.setAttribute('class', 'item delete') ;
     row.childNodes[3].childNodes[1].innerHTML="undone" ;
   }
-
-  var headers = new Headers();
-  headers.append('X-CSRFToken', csrftoken);
-  headers.append('Accept', "application/json");
-  headers.append('Content-Type', "application/json");
 
   var body = {
     "item_id": item_id

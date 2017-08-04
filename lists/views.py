@@ -8,6 +8,11 @@ def home_page(request):
     return render(request, 'home.html')
 
 def view_list(request, list_id):
+    if request.method == 'DELETE':
+        body_unicode = request.body.decode('utf-8')
+        body_data = json.loads(body_unicode)
+        Item.objects.filter(id=body_data['item_id']).delete()
+
     list_ = List.objects.get(id=list_id)
     return render(request, 'list.html', {
         'list':list_
