@@ -45,7 +45,6 @@ body::before {
 h1 {
     font-family: 'Bellefair','Josefin Sans', sans-serif, cursive;
     font-weight: 300 ;
-    color: rgba(240, 20, 200, 0);
 }
 
 .button {

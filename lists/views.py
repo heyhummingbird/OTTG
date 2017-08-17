@@ -51,4 +51,8 @@ def done_item(request, list_id):
         item = Item.objects.filter(id=body_data['item_id'])[0]
         item.done = not item.done
         item.save()
-        return redirect(f'/lists/{list_id}/')
+#        response = new Response(("Response body", {
+#    headers: { "Content-Type" : "text/plain" }
+#  }) 
+        return redirect(f'/lists/{list_id}/', {'item': item})
+#        return response 

@@ -12,7 +12,7 @@ function getCookie(name) {
 $(".item").each(function(i) {
   var done_button = this.childNodes[3].childNodes[1] ;
   var delete_button = this.childNodes[1].childNodes[1] ;
-  var item_id = $(this).attr('item_id') ;
+  var item_id = $(this).attr('id') ;
   var item_done = $(this).attr('item_done') ;
 
   done_button.addEventListener('click', function() {
@@ -31,7 +31,8 @@ $(".item").each(function(i) {
 
 function DeleteItem(index, item_id) {
   var list = document.querySelector("#id_list_table").childNodes[1] ;
-  list.removeChild(list.childNodes[index*2 + 1]) ;
+  var item = document.getElementById(item_id) ;
+  list.removeChild(item) ;
 
   var body = {
     "item_id": item_id
@@ -46,14 +47,16 @@ function DeleteItem(index, item_id) {
 
   fetch(delete_request).then(function(response) {
   }).catch(function(err) {
-      alert("Error!")
+      alert("Error!") ;
   })
   return ;
 
 }
 
 function DoneItem(index, item_id) {
-  var row = document.querySelector("#id_list_table").childNodes[1].childNodes[index*2 + 1] ;
+  console.log(index) ;
+  console.log(item_id) ;
+  var row = document.getElementById(item_id) ;
   if (row.classList.contains("delete") === true) {
     row.removeAttribute('class', 'delete') ;
     row.childNodes[3].childNodes[1].innerHTML="done" ;
@@ -75,9 +78,15 @@ function DoneItem(index, item_id) {
   })
 
   fetch(done_request).then(function(response) {
-    //處理 response
+    if(response.ok) {
+//      console.log(response) ;
+//      console.log(response.text()) ;
+//      response.text().then(function(data) {
+//        console.log(data) ;
+//      });
+    }
   }).catch(function(err) {
-      alert("Error!")
+      alert("Error!") ;
   })
   return ;
 }
