@@ -9,17 +9,17 @@ function getCookie(name) {
   if (parts.length == 2) return parts.pop().split(";").shift();
 }
 
-$(".item").each(function(i) {
+$(".item").each(function() {
   var done_button = this.childNodes[3].childNodes[1] ;
   var delete_button = this.childNodes[1].childNodes[1] ;
   var item_id = $(this).attr('id') ;
   var item_done = $(this).attr('item_done') ;
 
   done_button.addEventListener('click', function() {
-    DoneItem(i, item_id) ;
+    DoneItem(item_id) ;
   }) 
   delete_button.addEventListener('click', function() {
-    DeleteItem(i, item_id) ;
+    DeleteItem(item_id) ;
   }) 
 
   var complete = item_done.toLowerCase() ;
@@ -29,7 +29,7 @@ $(".item").each(function(i) {
   }
 });
 
-function DeleteItem(index, item_id) {
+function DeleteItem(item_id) {
   var list = document.querySelector("#id_list_table").childNodes[1] ;
   var item = document.getElementById(item_id) ;
   list.removeChild(item) ;
@@ -53,9 +53,7 @@ function DeleteItem(index, item_id) {
 
 }
 
-function DoneItem(index, item_id) {
-  console.log(index) ;
-  console.log(item_id) ;
+function DoneItem(item_id) {
   var row = document.getElementById(item_id) ;
   if (row.classList.contains("delete") === true) {
     row.removeAttribute('class', 'delete') ;
